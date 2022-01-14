@@ -32,6 +32,7 @@ function App() {
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
 
   const onLoginFailed = (e: any) => {
