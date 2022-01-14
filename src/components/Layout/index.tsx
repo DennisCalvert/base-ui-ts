@@ -1,10 +1,8 @@
-import { useState, FC, ReactElement, ReactNode } from "react";
+import { useState, FC, ReactNode } from "react";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
 import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import { useUser } from "hooks/user";
 const { Header, Content, Footer, Sider } = Layout;
-// const { SubMenu } = Menu;
 
 interface Props {
   children: ReactNode;

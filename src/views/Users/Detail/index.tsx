@@ -1,8 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
-import { Button, Drawer, Space, Table, Spin, Input } from "antd";
-// import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { list, create, get } from "../../../services/user";
-// import { CreateNewUser } from "./CreateNewUser";
+import { Spin } from "antd";
+import { get } from "../../../services/user";
 import { useParams } from "react-router-dom";
 
 type UserType = {
@@ -19,24 +17,15 @@ export const UserDetail = () => {
   const [isLoading, setLoading] = useState(true);
   const { id } = useParams();
 
-  console.log(id);
   const fetchData = useCallback(async () => {
     const res = await get(id);
     setUser(res);
     setLoading(false);
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  //   const onFinishCreateNewUser = async (data: any) => {
-  //     setLoading(true);
-  //     setNewUserDrawerVisible(false);
-  //     await create(data);
-  //     console.log(data);
-  //     fetchData();
-  //   };
+  }, [fetchData]);
 
   if (isLoading) return <Spin />;
 

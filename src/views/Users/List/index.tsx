@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import { Button, Drawer, Space, Table, Spin, Checkbox, Popover } from "antd";
+import { Button, Drawer, Space, Table, Spin, Popover } from "antd";
 import {
   CheckCircleOutlined,
   EditOutlined,
@@ -9,7 +9,6 @@ import { list, create, destroy, update } from "services/user";
 import { CreateNewUser } from "../CreateNewUser";
 import { Link } from "react-router-dom";
 import { UserType } from "types/User";
-// import { CheckboxChangeEvent } from "antd/lib/checkbox";
 
 export const UsersList = () => {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -29,7 +28,7 @@ export const UsersList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const showDrawer = () => setNewUserDrawerVisible(true);
   const hideDrawer = () => setNewUserDrawerVisible(false);

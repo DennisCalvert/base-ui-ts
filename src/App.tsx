@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import "antd/dist/antd.css";
+import { useState } from "react";
+// import "antd/dist/antd.css";
 import "./App.css";
 import { LoginForm } from "./components/LoginForm";
 import { AppLayout } from "./components/Layout";
 import { Routes, Route } from "react-router-dom";
-import { login as loginService } from "services/user";
 import { UserType } from "types/User";
-// import { useUser } from "./hooks/user";
 
 import { UsersList } from "./views/Users/List";
 import { UserDetail } from "./views/Users/Detail";
@@ -28,7 +26,7 @@ function App() {
     const { email, password } = data;
     try {
       setLoading(true);
-      const res = await longinService(email, password);
+      await longinService(email, password);
       setAuthenticated(true);
       setLoading(false);
     } catch (e) {

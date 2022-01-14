@@ -76,9 +76,11 @@ const destroy = async (route, data) => {
   }
 };
 
-export default {
+const services = {
   post,
   get,
   destroy,
   put,
 };
+
+export default services;
