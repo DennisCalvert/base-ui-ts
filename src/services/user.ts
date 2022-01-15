@@ -20,3 +20,6 @@ export const destroy = async (id: string) =>
 
 export const update = async (data: UserType) =>
   await api.put(`${baseRoute}/${data.id}`, data);
+
+export const uploadProfilePhoto = async (userId: string, file: any) =>
+  await api.uploadFile(`${baseRoute}/profilePhoto/${userId}`, file);

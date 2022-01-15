@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Card, Form, Input, Layout, Button, Checkbox } from "antd";
+import { Card, Form, Input, Layout, Button, Checkbox, Spin } from "antd";
 import { UserType } from "../../types/User";
 const { Content } = Layout;
 
@@ -63,7 +63,7 @@ export const LoginForm: FC<LoginFormProps> = ({
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button type="primary" htmlType="submit" disabled={isLoading}>
-                Submit
+                {isLoading ? <Spin /> : "Submit"}
               </Button>
             </Form.Item>
           </Form>

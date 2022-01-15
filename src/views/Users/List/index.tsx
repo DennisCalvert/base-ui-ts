@@ -1,5 +1,14 @@
 import { useCallback, useState, useEffect } from "react";
-import { Button, Drawer, Space, Table, Spin, Popover } from "antd";
+import {
+  Button,
+  Drawer,
+  Space,
+  Table,
+  Spin,
+  Popover,
+  Avatar,
+  Image,
+} from "antd";
 import {
   CheckCircleOutlined,
   EditOutlined,
@@ -7,7 +16,6 @@ import {
 } from "@ant-design/icons";
 import { list, create, destroy, update } from "services/user";
 import { CreateNewUser } from "../CreateNewUser";
-import { Link } from "react-router-dom";
 import { UserType } from "types/User";
 
 export const UsersList = () => {
@@ -80,11 +88,21 @@ export const UsersList = () => {
 
   const columns = [
     {
+      // title: ""
+      dataIndex: "id",
+      key: "id",
+      render: (id: string, user: UserType) => (
+        <Avatar src={<Image src={user.imgUrl} style={{ width: 32 }} />} />
+      ),
+    },
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
       render: (email: string, user: UserType) => (
-        <Link to={`/users/${user.id}`}>{email}</Link>
+        <Button type="link" onClick={() => showUpdateDrawer(user)}>
+          {email}
+        </Button>
       ),
     },
     {
@@ -153,7 +171,7 @@ export const UsersList = () => {
         visible={isNewUserDrawerVisible}
         destroyOnClose
       >
-        <CreateNewUser onFinish={onCreateNewUser} />
+        <CreateNewUser onFinish={onCreateNewUser} fetchData={fetchData} />
       </Drawer>
       <Drawer
         title="Update User"
@@ -162,7 +180,11 @@ export const UsersList = () => {
         visible={isUpdateUserDrawerVisible}
         destroyOnClose
       >
-        <CreateNewUser onFinish={onUpdateUser} data={selectedUser} />
+        <CreateNewUser
+          onFinish={onUpdateUser}
+          data={selectedUser}
+          fetchData={fetchData}
+        />
       </Drawer>
     </>
   );

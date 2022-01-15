@@ -6,4 +6,5 @@ export type UserType = {
   id: string;
   _id: string;
   password: string;
+  imgUrl: string;
 };

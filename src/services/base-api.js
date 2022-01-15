@@ -19,7 +19,30 @@ const post = async (route, data) => {
     return res.data;
   } catch (e) {
     notification.open({
-      message: "Error Creating User",
+      message: "Network Error",
+      description: e.response.data,
+    });
+  }
+};
+
+export const uploadFile = async (route, file) => {
+  let formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `${URI}${route}`,
+      data: formData,
+      headers: {
+        ...config(),
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  } catch (e) {
+    notification.open({
+      message: "Network Error",
       description: e.response.data,
     });
   }
@@ -36,7 +59,7 @@ const put = async (route, data) => {
     return res.data;
   } catch (e) {
     notification.open({
-      message: "Error Updating User",
+      message: "Network Error",
       description: e.response.data,
     });
   }
@@ -81,6 +104,7 @@ const services = {
   get,
   destroy,
   put,
+  uploadFile,
 };
 
 export default services;
