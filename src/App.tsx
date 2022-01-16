@@ -9,6 +9,7 @@ import { UserType } from "types/User";
 import { UsersList } from "./views/Users/List";
 import { UserDetail } from "./views/Users/Detail";
 import { Home } from "./views/Home";
+import { Inventory } from "views/Inventory";
 import { login as longinService } from "services/user";
 
 const PageNotFound = () => <h1>Not Found</h1>;
@@ -46,6 +47,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/users" element={<UsersList />} />
+            <Route path="/inventory" element={<Inventory />} />
             <Route path="/users/:id" element={<UserDetail />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

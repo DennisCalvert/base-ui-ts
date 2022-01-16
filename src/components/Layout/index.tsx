@@ -1,7 +1,12 @@
 import { useState, FC, ReactNode } from "react";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
-import { HomeOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 const { Header, Content, Footer, Sider } = Layout;
 
 interface Props {
@@ -26,6 +31,9 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
           </Menu.Item>
           <Menu.Item key="2" icon={<UserOutlined />}>
             <Link to="/users">Users</Link>
+          </Menu.Item>
+          <Menu.Item key="3" icon={<UnorderedListOutlined />}>
+            <Link to="/inventory">Inventory Tool</Link>
           </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="User">
             <Menu.Item key="3">Tom</Menu.Item>
