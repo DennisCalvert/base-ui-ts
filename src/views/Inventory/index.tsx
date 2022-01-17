@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Collapse } from "antd";
-import { data as mockData } from "./data";
+import { data as mockData } from "./flatData";
 import { iMeta } from "./types";
 
 const { Panel } = Collapse;
@@ -8,58 +8,82 @@ const { Panel } = Collapse;
 export const Inventory = () => {
   const [data, setData] = useState(mockData);
 
-  // const findItemNested = (arr, itemId, nestingKey) =>
-  //   arr.reduce((a, item) => {
-  //     if (a) return a;
-  //     if (item.id === itemId) return item;
-  //     if (item[nestingKey])
-  //       return findItemNested(item[nestingKey], itemId, nestingKey);
-  //   }, null);
+  const onAddItem = (itemId: string) => {
+    setData(
+      data.concat([
+        {
+          name: "test",
+          id: Date.now().toString(),
+          parentNode: itemId,
+        },
+      ])
+    );
+  };
 
-  // console.log(mockData.flatten());
-  const onAddItem = (itemId: string) => {};
+  const onDeleteItem = (id: string) => {
+    setData(data.filter((i) => i.id !== id));
+  };
 
-  const render: any = (data: any) => {
+  const render: any = (id: string) => {
+    const item = data.find((i) => i.id === id);
+    if (!item) return null;
+
+    const children = data.filter((i) => i.parentNode === id).map((i) => i.id);
+
     return (
-      // <Collapse defaultActiveKey={['1']} ghost>
       <Panel
+        key={id}
         header={
           <>
-            {data.imgUrl && (
+            {item?.imgUrl && (
               <img
-                src={data.imgUrl}
-                alt={data.name}
+                src={item?.imgUrl}
+                alt={item?.name}
                 style={{ width: "20px" }}
               />
             )}
             &nbsp;
-            {data.name}
+            {item?.name}
           </>
         }
-        key={data.id}
         extra={
-          data.meta &&
-          data.meta.map((m: iMeta) =>
-            Object.keys(m).map((key) => (
-              <>
-                &nbsp; {key}:{m[key]}
-              </>
-            ))
-          )
+          <>
+            {item?.meta &&
+              item?.meta.map((m: iMeta) =>
+                Object.keys(m).map((key) => (
+                  <span key={key}>
+                    &nbsp; {key}:{m[key]}
+                  </span>
+                ))
+              )}
+            <Button onClick={() => onAddItem(id)} size="small" shape="circle">
+              +
+            </Button>{" "}
+            <Button
+              onClick={() => onDeleteItem(id)}
+              size="small"
+              shape="circle"
+              danger
+            >
+              X
+            </Button>
+          </>
         }
       >
-        {data.imgUrl && (
-          <img src={data.imgUrl} alt={data.name} style={{ width: "100px" }} />
+        {item?.imgUrl && (
+          <img src={item?.imgUrl} alt={item?.name} style={{ width: "100px" }} />
         )}
-        {data.description && <div>{data.description}</div>}
-        {data.collection && (
-          <Collapse ghost>{data.collection.map(render)}</Collapse>
-        )}
-        {/* <Button onClick={() => onAddItem(data.id)}>Add Item</Button> */}
+        {item?.description && <div>{item?.description}</div>}
+        {children && <Collapse ghost>{children?.map(render)}</Collapse>}
       </Panel>
-      // </Collapse>
     );
   };
 
-  return <Collapse ghost>{render(data)}</Collapse>;
+  const parent = data.find((i) => !i.hasOwnProperty("parentNode"));
+
+  return (
+    <Collapse defaultActiveKey={[parent?.id || ""]} ghost>
+      {parent && render(parent.id)}
+    </Collapse>
+  );
 };
