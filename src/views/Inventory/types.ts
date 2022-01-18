@@ -7,7 +7,7 @@ export interface iInventory {
   name?: string;
   description?: string;
   collection?: iInventory[];
-  parentNode?: string;
+  parentId?: string;
   imgUrl?: string;
   meta?: iMeta[];
 }

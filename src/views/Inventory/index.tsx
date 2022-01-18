@@ -1,23 +1,47 @@
 import { useState } from "react";
-import { Button, Collapse } from "antd";
+import { Button, Collapse, Drawer } from "antd";
+import {
+  EditOutlined,
+  FileAddOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { data as mockData } from "./flatData";
-import { iMeta } from "./types";
-
+import { iInventory, iMeta } from "./types";
+import { NewItemForm } from "./NewItemForm";
 const { Panel } = Collapse;
 
-export const Inventory = () => {
-  const [data, setData] = useState(mockData);
+const localData: iInventory[] =
+  // @ts-ignore
+  JSON.parse(window.localStorage.getItem("inventory")) || mockData;
 
-  const onAddItem = (itemId: string) => {
-    setData(
-      data.concat([
-        {
-          name: "test",
-          id: Date.now().toString(),
-          parentNode: itemId,
-        },
-      ])
+export const Inventory = () => {
+  const [data, setData] = useState(localData);
+  const [isDrawerVisible, setDrawerVisible] = useState<boolean>();
+  const [selectedParentId, setSelectedParentId] = useState<string>();
+  const [selectedData, setSelectedData] = useState<iInventory | undefined>();
+
+  const onAddItem = (mutatedItem: iInventory) => {
+    const newInventoryState = data.concat(mutatedItem);
+    setData(newInventoryState);
+    setDrawerVisible(false);
+    window.localStorage.setItem("inventory", JSON.stringify(newInventoryState));
+  };
+
+  const onUpdateItem = (mutatedItem: iInventory) => {
+    const newInventoryState = data.map((i) =>
+      i.id === mutatedItem?.id ? mutatedItem : i
     );
+    setData(newInventoryState);
+    setDrawerVisible(false);
+    window.localStorage.setItem("inventory", JSON.stringify(newInventoryState));
+  };
+
+  const hideDrawer = () => setDrawerVisible(false);
+
+  const showDrawer = (parentId: string | undefined, data?: iInventory) => {
+    setSelectedParentId(parentId);
+    setSelectedData(data);
+    setDrawerVisible(true);
   };
 
   const onDeleteItem = (id: string) => {
@@ -28,7 +52,7 @@ export const Inventory = () => {
     const item = data.find((i) => i.id === id);
     if (!item) return null;
 
-    const children = data.filter((i) => i.parentNode === id).map((i) => i.id);
+    const children = data.filter((i) => i.parentId === id).map((i) => i.id);
 
     return (
       <Panel
@@ -56,8 +80,16 @@ export const Inventory = () => {
                   </span>
                 ))
               )}
-            <Button onClick={() => onAddItem(id)} size="small" shape="circle">
-              +
+            &nbsp;
+            <Button
+              onClick={() => showDrawer(item?.parentId, item)}
+              size="small"
+              shape="circle"
+            >
+              <EditOutlined />
+            </Button>{" "}
+            <Button onClick={() => showDrawer(id)} size="small" shape="circle">
+              <FileAddOutlined />
             </Button>{" "}
             <Button
               onClick={() => onDeleteItem(id)}
@@ -65,7 +97,7 @@ export const Inventory = () => {
               shape="circle"
               danger
             >
-              X
+              <DeleteOutlined />
             </Button>
           </>
         }
@@ -79,11 +111,27 @@ export const Inventory = () => {
     );
   };
 
-  const parent = data.find((i) => !i.hasOwnProperty("parentNode"));
+  const parent = data.find((i) => !i.hasOwnProperty("parentId"));
 
   return (
-    <Collapse defaultActiveKey={[parent?.id || ""]} ghost>
-      {parent && render(parent.id)}
-    </Collapse>
+    <>
+      <Collapse defaultActiveKey={[parent?.id || ""]} ghost>
+        {parent && render(parent.id)}
+      </Collapse>
+      <Drawer
+        title="Update User"
+        placement="right"
+        onClose={hideDrawer}
+        visible={isDrawerVisible}
+        destroyOnClose
+      >
+        <NewItemForm
+          handleCreateNewItem={onAddItem}
+          handleUpdateItem={onUpdateItem}
+          parentId={selectedParentId}
+          data={selectedData}
+        />
+      </Drawer>
+    </>
   );
 };

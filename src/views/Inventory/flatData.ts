@@ -7,18 +7,18 @@ export const data: iInventory[] = [
   },
   {
     id: "1db3276d-f7de-4a0f-8c8f-9dbadf510ef7",
-    parentNode: "5f0609c43425bd001737d38e",
+    parentId: "5f0609c43425bd001737d38e",
     name: "Home",
     meta: [{ Address: "2480 Mohawk Dr, Birmingham, Al, 35217" }],
   },
   {
     id: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
-    parentNode: "1db3276d-f7de-4a0f-8c8f-9dbadf510ef7",
+    parentId: "1db3276d-f7de-4a0f-8c8f-9dbadf510ef7",
     name: "Cameras",
   },
   {
     id: "02bedc71-fbb0-4f35-89b6-336d7d0f190b",
-    parentNode: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
+    parentId: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
     name: "Sony a7SIII",
     imgUrl:
       "https://denniscalvert.s3.amazonaws.com/5f0609c43425bd001737d38e/uploads/a7siii.jpeg",
@@ -29,20 +29,20 @@ export const data: iInventory[] = [
   {
     id: "0664d3eb-e414-4119-93a7-cdd7c6d9fe12",
     name: "Sony a7RIII",
-    parentNode: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
+    parentId: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
     imgUrl:
       "https://denniscalvert.s3.amazonaws.com/5f0609c43425bd001737d38e/uploads/10644548623_f184c98e94_b.jpg",
   },
   {
     id: "aa94e080-bebf-4eee-85bb-68b08af931c9",
-    parentNode: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
+    parentId: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
     name: "Kodak Brownie",
     imgUrl:
       "https://denniscalvert.s3.amazonaws.com/5f0609c43425bd001737d38e/uploads/10644548623_f184c98e94_b.jpg",
   },
   {
     id: "c282f8f4-18a0-42c1-9e62-a6fb4ddcff12",
-    parentNode: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
+    parentId: "1f07ea9d-20a6-476b-89e7-b78b6531ff91",
     name: "Canon 5",
     imgUrl:
       "https://denniscalvert.s3.amazonaws.com/5f0609c43425bd001737d38e/uploads/10644548623_f184c98e94_b.jpg",
@@ -50,12 +50,12 @@ export const data: iInventory[] = [
 
   {
     id: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
-    parentNode: "1db3276d-f7de-4a0f-8c8f-9dbadf510ef7",
+    parentId: "1db3276d-f7de-4a0f-8c8f-9dbadf510ef7",
     name: "Comic Books",
   },
   {
     id: "ea79963d-9283-4a84-bbe1-0a8474d8d253",
-    parentNode: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
+    parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
     meta: [{ "#": 298 }],
     imgUrl:
@@ -63,7 +63,7 @@ export const data: iInventory[] = [
   },
   {
     id: "12863545-dae5-4b59-b124-96c951d3ccc7",
-    parentNode: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
+    parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
     meta: [{ "#": 299 }],
     imgUrl:
@@ -71,7 +71,7 @@ export const data: iInventory[] = [
   },
   {
     id: "0f6d50d3-b1c0-41a5-a2d6-82a99174d4c5",
-    parentNode: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
+    parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
     meta: [{ "#": 300 }, { value: "1800" }],
     imgUrl:
@@ -79,7 +79,7 @@ export const data: iInventory[] = [
   },
   {
     id: "b52ec9d7-f76e-4d73-9d04-22eb6ad79055",
-    parentNode: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
+    parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
     meta: [{ "#": 301 }],
     imgUrl:
