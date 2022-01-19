@@ -57,7 +57,7 @@ export const data: iInventory[] = [
     id: "ea79963d-9283-4a84-bbe1-0a8474d8d253",
     parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
-    meta: [{ "#": 298 }],
+    meta: [{ "#": "298" }],
     imgUrl:
       "https://denniscalvert.s3.us-east-2.amazonaws.com/5f0609c43425bd001737d38e/uploads/clean.jpg",
   },
@@ -65,7 +65,7 @@ export const data: iInventory[] = [
     id: "12863545-dae5-4b59-b124-96c951d3ccc7",
     parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
-    meta: [{ "#": 299 }],
+    meta: [{ "#": "299" }],
     imgUrl:
       "https://denniscalvert.s3.us-east-2.amazonaws.com/5f0609c43425bd001737d38e/uploads/clean.jpg",
   },
@@ -73,7 +73,7 @@ export const data: iInventory[] = [
     id: "0f6d50d3-b1c0-41a5-a2d6-82a99174d4c5",
     parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
-    meta: [{ "#": 300 }, { value: "1800" }],
+    meta: [{ "#": "300" }, { value: "1800" }],
     imgUrl:
       "https://denniscalvert.s3.us-east-2.amazonaws.com/5f0609c43425bd001737d38e/uploads/clean.jpg",
   },
@@ -81,7 +81,7 @@ export const data: iInventory[] = [
     id: "b52ec9d7-f76e-4d73-9d04-22eb6ad79055",
     parentId: "dfefca96-9294-40aa-bbc9-513b9b13ce33",
     name: "Spider-Man",
-    meta: [{ "#": 301 }],
+    meta: [{ "#": "301" }],
     imgUrl:
       "https://denniscalvert.s3.us-east-2.amazonaws.com/5f0609c43425bd001737d38e/uploads/clean.jpg",
   },

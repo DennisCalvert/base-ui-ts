@@ -1,5 +1,5 @@
 export interface iMeta {
-  [key: string]: string | number;
+  [key: string]: string;
 }
 
 export interface iInventory {

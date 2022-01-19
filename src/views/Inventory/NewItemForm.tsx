@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Form, Button, Input, Image, Upload, message, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { iInventory } from "./types";
+import { iInventory, iMeta } from "./types";
 import { v4 as uuid4 } from "uuid";
 const { TextArea } = Input;
 
@@ -89,15 +89,19 @@ export const NewItemForm: FC<Props> = ({
         <Form.Item label="Value" name="value">
           <Input type="number" prefix="$" />
         </Form.Item>
-
+        {/* 
         {data?.meta &&
-          data.meta.map((m, i) =>
-            Object.keys(m).map((key) => (
-              <Form.Item label={key} name={`meta-${m[key]}`}>
-                <Input defaultValue={m[key]} />
+          data.meta.map((meta: iMeta, i: number) =>
+            Object.keys(meta).map((key: string) => (
+              // @ts-ignore
+              //   getFieldDecorator(`meta[${index}][${key}]`)(
+              //     <Input placeholder="Base Price" />
+              //   )
+              <Form.Item label={key} name={`meta-${key}`}>
+                <Input defaultValue={meta[key]} />
               </Form.Item>
             ))
-          )}
+          )} */}
 
         <Form.Item
           wrapperCol={{ offset: 8, span: 16 }}
