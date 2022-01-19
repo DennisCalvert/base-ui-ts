@@ -103,10 +103,20 @@ export const Inventory = () => {
         }
       >
         {item?.imgUrl && (
-          <img src={item?.imgUrl} alt={item?.name} style={{ width: "100px" }} />
+          <img
+            src={item?.imgUrl}
+            alt={item?.name}
+            style={{ display: "block", margin: "0 auto" }}
+          />
         )}
-        {item?.description && <div>{item?.description}</div>}
-        {children && <Collapse ghost>{children?.map(render)}</Collapse>}
+        {item?.description && (
+          <div style={{ whiteSpace: "pre-line" }}>{item?.description}</div>
+        )}
+        {children && (
+          <Collapse ghost collapsible="header">
+            {children?.map(render)}
+          </Collapse>
+        )}
       </Panel>
     );
   };
@@ -123,6 +133,7 @@ export const Inventory = () => {
         placement="right"
         onClose={hideDrawer}
         visible={isDrawerVisible}
+        size="large"
         destroyOnClose
       >
         <NewItemForm

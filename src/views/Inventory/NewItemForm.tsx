@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { Form, Button, Input, Image, Upload, message } from "antd";
+import { Form, Button, Input, Image, Upload, message, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { iInventory } from "./types";
 import { v4 as uuid4 } from "uuid";
+const { TextArea } = Input;
 
 interface Props {
   handleCreateNewItem: (data: iInventory) => void;
@@ -36,8 +37,7 @@ export const NewItemForm: FC<Props> = ({
 
   const props = {
     name: "file",
-    // action: `http://localhost:4000/users/${data?.id}/profilePhoto`,
-    action: `https://base-api-ts.herokuapp.com/users/${data?.id}/profilePhoto`,
+    action: `https://base-api-ts.herokuapp.com/users/${data?.id}/uploads/inventory`,
     headers: {
       // authorization: "authorization-text",
       Authorization: `Bearer ${sessionStorage.getItem("token") || null}`,
@@ -58,14 +58,19 @@ export const NewItemForm: FC<Props> = ({
 
   return (
     <>
-      <Image src={data?.imgUrl} />
-      <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-      </Upload>
+      <Space direction="vertical" align="center" style={{ width: "100%" }}>
+        <Image src={data?.imgUrl} />
+        <Upload {...props}>
+          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+        </Upload>
+      </Space>
+      <br />
+      <br />
+      <br />
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
         initialValues={data}
         onFinish={data ? onFinishUpdate : onFinishCreate}
         onFinishFailed={onFinishFailed}
@@ -74,22 +79,25 @@ export const NewItemForm: FC<Props> = ({
         <Form.Item
           label="Name"
           name="name"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[{ required: true, message: "Please Add a Name!" }]}
         >
           <Input />
         </Form.Item>
-        {/* 
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password />
-        </Form.Item> */}
-        {/* 
-        <Form.Item label="Is Admin" name="isAdmin" valuePropName="checked">
-          <Checkbox />
-        </Form.Item> */}
+        <Form.Item label="Description" name="description">
+          <TextArea rows={7} />
+        </Form.Item>
+        <Form.Item label="Value" name="value">
+          <Input type="number" prefix="$" />
+        </Form.Item>
+
+        {data?.meta &&
+          data.meta.map((m, i) =>
+            Object.keys(m).map((key) => (
+              <Form.Item label={key} name={`meta-${m[key]}`}>
+                <Input defaultValue={m[key]} />
+              </Form.Item>
+            ))
+          )}
 
         <Form.Item
           wrapperCol={{ offset: 8, span: 16 }}
