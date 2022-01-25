@@ -1,9 +1,10 @@
 import { FC, useContext } from "react";
-import { Form, Button, Input, Image, Upload, message, Space } from "antd";
+import { Form, Button, Input, Upload, message, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { iInventory } from "./types";
 import { UserContext } from "context/user";
 import { v4 as uuid4 } from "uuid";
+import { InventoryImage } from "./shared";
 const { TextArea } = Input;
 
 interface Props {
@@ -39,8 +40,7 @@ export const NewItemForm: FC<Props> = ({
 
   const props = {
     name: "file",
-    // action: `https://base-api-ts.herokuapp.com/inventory/upload/${data?.id}`,
-    action: `http://localhost:4000/inventory/upload/${data?.id}`,
+    action: `http:/${process.env.REACT_APP_API_URL}/inventory/upload/${data?.id}`,
     headers: {
       // authorization: "authorization-text",
       Authorization: `Bearer ${sessionStorage.getItem("token") || null}`,
@@ -62,8 +62,11 @@ export const NewItemForm: FC<Props> = ({
   return (
     <>
       <Space direction="vertical" align="center" style={{ width: "100%" }}>
-        <Image
-          src={`https://denniscalvert.s3.amazonaws.com/${user._id}/uploads/inventory/${data?.id}`}
+        <InventoryImage
+          userId={user._id}
+          itemId={data?.id}
+          alt={data?.name}
+          style={{ display: "block", margin: "0 auto" }}
         />
         <Upload {...props}>
           <Button icon={<UploadOutlined />}>Click to Upload</Button>
@@ -91,9 +94,9 @@ export const NewItemForm: FC<Props> = ({
         <Form.Item label="Description" name="description">
           <TextArea rows={7} />
         </Form.Item>
-        <Form.Item label="Value" name="value">
+        {/* <Form.Item label="Value" name="value">
           <Input type="number" prefix="$" />
-        </Form.Item>
+        </Form.Item> */}
         {/* 
         {data?.meta &&
           data.meta.map((meta: iMeta, i: number) =>

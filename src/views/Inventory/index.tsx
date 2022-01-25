@@ -9,6 +9,7 @@ import { iInventory, iMeta } from "./types";
 import { NewItemForm } from "./NewItemForm";
 import { get, post } from "services/inventory";
 import { useParams } from "react-router-dom";
+import { InventoryImage } from "./shared";
 const { Panel } = Collapse;
 
 export const Inventory = () => {
@@ -76,13 +77,12 @@ export const Inventory = () => {
         key={id}
         header={
           <>
-            {item?.imgUrl && (
-              <img
-                src={item?.imgUrl}
-                alt={item?.name}
-                style={{ width: "20px" }}
-              />
-            )}
+            <InventoryImage
+              userId={userId}
+              itemId={item?.id}
+              alt={item?.name}
+              style={{ width: "20px" }}
+            />
             &nbsp;
             {item?.name}
           </>
@@ -119,13 +119,12 @@ export const Inventory = () => {
           </>
         }
       >
-        {item?.imgUrl && (
-          <img
-            src={item?.imgUrl}
-            alt={item?.name}
-            style={{ display: "block", margin: "0 auto" }}
-          />
-        )}
+        {/* <InventoryImage
+          userId={userId}
+          itemId={item?.id}
+          alt={item?.name}
+          style={{ display: "block", margin: "0 auto" }}
+        /> */}
         {item?.description && (
           <div style={{ whiteSpace: "pre-line" }}>{item?.description}</div>
         )}
