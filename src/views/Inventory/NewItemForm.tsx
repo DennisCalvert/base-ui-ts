@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Form, Button, Input, Image, Upload, message, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { iInventory } from "./types";
+import { UserContext } from "context/user";
 import { v4 as uuid4 } from "uuid";
 const { TextArea } = Input;
 
@@ -18,6 +19,7 @@ export const NewItemForm: FC<Props> = ({
   data,
   parentId,
 }) => {
+  const user = useContext(UserContext);
   const onFinishCreate = (formData: iInventory) => {
     handleCreateNewItem({
       ...formData,
@@ -37,7 +39,8 @@ export const NewItemForm: FC<Props> = ({
 
   const props = {
     name: "file",
-    action: `https://base-api-ts.herokuapp.com/users/${data?.id}/uploads/inventory`,
+    // action: `https://base-api-ts.herokuapp.com/inventory/upload/${data?.id}`,
+    action: `http://localhost:4000/inventory/upload/${data?.id}`,
     headers: {
       // authorization: "authorization-text",
       Authorization: `Bearer ${sessionStorage.getItem("token") || null}`,
@@ -59,7 +62,9 @@ export const NewItemForm: FC<Props> = ({
   return (
     <>
       <Space direction="vertical" align="center" style={{ width: "100%" }}>
-        <Image src={data?.imgUrl} />
+        <Image
+          src={`https://denniscalvert.s3.amazonaws.com/${user._id}/uploads/inventory/${data?.id}`}
+        />
         <Upload {...props}>
           <Button icon={<UploadOutlined />}>Click to Upload</Button>
         </Upload>
