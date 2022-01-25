@@ -3,9 +3,13 @@ import { UserType } from "types/User";
 
 const baseRoute = "/users";
 
-export const login = async (email: string, password: string): Promise<void> => {
+export const login = async (
+  email: string,
+  password: string | undefined
+): Promise<UserType> => {
   const res = await api.post("/login", { email, password });
   window.sessionStorage.setItem("token", JSON.stringify(res.token));
+  return res;
 };
 
 export const list = async (): Promise<any> => api.get(baseRoute);

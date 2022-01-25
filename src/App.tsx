@@ -1,35 +1,38 @@
-import { useState } from "react";
+import { createContext, useState } from "react";
 // import "antd/dist/antd.css";
 import "./App.css";
 import { LoginForm } from "./components/LoginForm";
 import { AppLayout } from "./components/Layout";
 import { Routes, Route } from "react-router-dom";
 import { UserType } from "types/User";
+import { blankUser } from "context/user";
 
 import { UsersList } from "./views/Users/List";
 import { UserDetail } from "./views/Users/Detail";
 import { Home } from "./views/Home";
 import { Inventory } from "views/Inventory";
 import { EmailTester } from "views/EmailTester";
-
 import { login as longinService } from "services/user";
+import { UserContext } from "context/user";
 
 const PageNotFound = () => <h1>Not Found</h1>;
 
 function App() {
   const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
+  const [userData, setUserData] = useState<UserType>(blankUser);
 
   const logout = () => {
     window.sessionStorage.removeItem("token");
     setAuthenticated(false);
   };
 
-  const onLoginFinish = async (data: UserType): Promise<any> => {
+  const onLoginFinish = async (data: UserType): Promise<void> => {
     const { email, password } = data;
     try {
       setLoading(true);
-      await longinService(email, password);
+      const res = await longinService(email, password);
+      setUserData(res);
       setAuthenticated(true);
       setLoading(false);
     } catch (e) {
@@ -42,19 +45,23 @@ function App() {
     console.log("Failed:", e);
   };
 
+  console.log({ userData });
+
   return (
     <div className="App">
       {isAuthenticated ? (
-        <AppLayout logout={logout}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/users" element={<UsersList />} />
-            <Route path="/inventory/:userId" element={<Inventory />} />
-            <Route path="/users/:id" element={<UserDetail />} />
-            <Route path="/email" element={<EmailTester />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </AppLayout>
+        <UserContext.Provider value={userData}>
+          <AppLayout logout={logout}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/users" element={<UsersList />} />
+              <Route path="/inventory/:userId" element={<Inventory />} />
+              <Route path="/users/:id" element={<UserDetail />} />
+              <Route path="/email" element={<EmailTester />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </AppLayout>
+        </UserContext.Provider>
       ) : (
         <LoginForm
           onLoginFinish={onLoginFinish}

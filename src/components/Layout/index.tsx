@@ -1,4 +1,4 @@
-import { useState, FC, ReactNode } from "react";
+import { useState, FC, ReactNode, useContext } from "react";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
 import {
@@ -8,6 +8,8 @@ import {
   UnorderedListOutlined,
   LayoutOutlined,
 } from "@ant-design/icons";
+import { UserContext } from "context/user";
+
 const { Content, Footer, Sider } = Layout;
 
 interface Props {
@@ -17,6 +19,7 @@ interface Props {
 
 export const AppLayout: FC<Props> = ({ children, logout }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const user = useContext(UserContext);
 
   const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed);
@@ -34,7 +37,7 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
             <Link to="/users">Users</Link>
           </Menu.Item>
           <Menu.Item key="3" icon={<UnorderedListOutlined />}>
-            <Link to="/inventory">Inventory Tool</Link>
+            <Link to={`/inventory${user._id}`}>Inventory Tool</Link>
           </Menu.Item>
           <Menu.Item key="4" icon={<LayoutOutlined />}>
             <Link to="/email">Email Preview</Link>
