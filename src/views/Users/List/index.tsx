@@ -17,6 +17,7 @@ import {
 import { list, create, destroy, update } from "services/user";
 import { CreateNewUser } from "../CreateNewUser";
 import { UserType } from "types/User";
+import { Link } from "react-router-dom";
 
 export const UsersList = () => {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -100,9 +101,9 @@ export const UsersList = () => {
       dataIndex: "email",
       key: "email",
       render: (email: string, user: UserType) => (
-        <Button type="link" onClick={() => showUpdateDrawer(user)}>
+        <Link type="link" to={`/inventory/${user.id}`}>
           {email}
-        </Button>
+        </Link>
       ),
     },
     {

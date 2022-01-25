@@ -1,39 +1,54 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Collapse, Drawer } from "antd";
 import {
   EditOutlined,
   FileAddOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { data as mockData } from "./flatData";
 import { iInventory, iMeta } from "./types";
 import { NewItemForm } from "./NewItemForm";
+import { get, post } from "services/inventory";
+import { useParams } from "react-router-dom";
 const { Panel } = Collapse;
 
-const localData: iInventory[] =
-  // @ts-ignore
-  JSON.parse(window.localStorage.getItem("inventory")) || mockData;
-
 export const Inventory = () => {
-  const [data, setData] = useState(localData);
+  const [data, setData] = useState<iInventory[]>([
+    { id: "parent", name: "Inventory Collection" },
+  ]);
   const [isDrawerVisible, setDrawerVisible] = useState<boolean>();
   const [selectedParentId, setSelectedParentId] = useState<string>();
   const [selectedData, setSelectedData] = useState<iInventory | undefined>();
+  // const [isLoading, setLoading] = useState(true);
+  const { userId } = useParams();
+
+  const fetchData = useCallback(async () => {
+    if (userId) {
+      const res = await get(userId);
+      if (res && res.data) {
+        setData(res.data);
+      }
+      // setLoading(false);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const onAddItem = (mutatedItem: iInventory) => {
-    const newInventoryState = data.concat(mutatedItem);
+    const newInventoryState = data?.concat(mutatedItem);
     setData(newInventoryState);
+    if (userId) post(userId, newInventoryState);
     setDrawerVisible(false);
-    window.localStorage.setItem("inventory", JSON.stringify(newInventoryState));
   };
 
   const onUpdateItem = (mutatedItem: iInventory) => {
-    const newInventoryState = data.map((i) =>
+    const newInventoryState = data?.map((i) =>
       i.id === mutatedItem?.id ? mutatedItem : i
     );
     setData(newInventoryState);
+    if (userId) post(userId, newInventoryState);
     setDrawerVisible(false);
-    window.localStorage.setItem("inventory", JSON.stringify(newInventoryState));
   };
 
   const hideDrawer = () => setDrawerVisible(false);
@@ -45,14 +60,16 @@ export const Inventory = () => {
   };
 
   const onDeleteItem = (id: string) => {
-    setData(data.filter((i) => i.id !== id));
+    const mutatedData = data?.filter((i) => i.id !== id);
+    setData(mutatedData);
+    if (userId) post(userId, mutatedData);
   };
 
   const render: any = (id: string) => {
-    const item = data.find((i) => i.id === id);
+    const item = data?.find((i) => i.id === id);
     if (!item) return null;
 
-    const children = data.filter((i) => i.parentId === id).map((i) => i.id);
+    const children = data?.filter((i) => i.parentId === id).map((i) => i.id);
 
     return (
       <Panel
@@ -121,7 +138,7 @@ export const Inventory = () => {
     );
   };
 
-  const parent = data.find((i) => !i.hasOwnProperty("parentId"));
+  const parent = data?.find((i) => !i.hasOwnProperty("parentId"));
 
   return (
     <>

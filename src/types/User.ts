@@ -1,3 +1,5 @@
+import { iInventory } from "views/Inventory/types";
+
 export type UserType = {
   email: string;
   isAdmin: boolean;
@@ -7,4 +9,5 @@ export type UserType = {
   _id: string;
   password: string;
   imgUrl: string;
+  inventory: iInventory[];
 };

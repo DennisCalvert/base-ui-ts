@@ -6,8 +6,9 @@ import {
   UserOutlined,
   LogoutOutlined,
   UnorderedListOutlined,
+  LayoutOutlined,
 } from "@ant-design/icons";
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 interface Props {
   children: ReactNode;
@@ -35,6 +36,12 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
           <Menu.Item key="3" icon={<UnorderedListOutlined />}>
             <Link to="/inventory">Inventory Tool</Link>
           </Menu.Item>
+          <Menu.Item key="4" icon={<LayoutOutlined />}>
+            <Link to="/email">Email Preview</Link>
+          </Menu.Item>
+          <Menu.Item key="5" onClick={logout}>
+            Logout <LogoutOutlined />
+          </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="User">
             <Menu.Item key="3">Tom</Menu.Item>
             <Menu.Item key="4">Bill</Menu.Item>
@@ -51,22 +58,18 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
       </Sider>
       <Layout className="site-layout">
         {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
-        <Header className="header">
-          {/* <div className="logo" /> */}
-          {/* <Button onClick={handleLogout} title="Logout" /> */}
+        {/* <Header className="header">
           <Menu
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={["2"]}
             style={{ justifyContent: "flex-end" }}
           >
-            {/* <Menu.Item key="1">nav 1</Menu.Item> */}
-            {/* <Menu.Item key="2">nav 2</Menu.Item> */}
             <Menu.Item key="3" onClick={logout}>
               Logout <LogoutOutlined />
             </Menu.Item>
           </Menu>
-        </Header>
+        </Header> */}
         <Content style={{ margin: "0 16px" }}>
           <div
             className="site-layout-background"

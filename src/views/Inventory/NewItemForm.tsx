@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Form, Button, Input, Image, Upload, message, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { iInventory, iMeta } from "./types";
+import { iInventory } from "./types";
 import { v4 as uuid4 } from "uuid";
 const { TextArea } = Input;
 
