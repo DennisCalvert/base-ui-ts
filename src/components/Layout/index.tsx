@@ -37,7 +37,7 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
             <Link to="/users">Users</Link>
           </Menu.Item>
           <Menu.Item key="3" icon={<UnorderedListOutlined />}>
-            <Link to={`/inventory${user._id}`}>Inventory Tool</Link>
+            <Link to={`/inventory/${user._id}`}>Inventory Tool</Link>
           </Menu.Item>
           <Menu.Item key="4" icon={<LayoutOutlined />}>
             <Link to="/email">Email Preview</Link>
