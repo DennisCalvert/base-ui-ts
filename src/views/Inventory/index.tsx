@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Collapse, Drawer } from "antd";
+import { Button, Collapse, Drawer, Popover } from "antd";
 import {
   EditOutlined,
   FileAddOutlined,
@@ -78,6 +78,8 @@ export const Inventory = () => {
 
     return (
       <Panel
+        // onClick={(event) => event.stopPropagation()}
+        showArrow={children.length > 0}
         key={id}
         header={
           <>
@@ -102,23 +104,47 @@ export const Inventory = () => {
               )}
             &nbsp;
             <Button
-              onClick={() => showDrawer(item?.parentId, item)}
+              onClick={(e) => {
+                e.stopPropagation();
+                showDrawer(item?.parentId, item);
+              }}
               size="small"
               shape="circle"
             >
               <EditOutlined />
             </Button>{" "}
-            <Button onClick={() => showDrawer(id)} size="small" shape="circle">
-              <FileAddOutlined />
-            </Button>{" "}
             <Button
-              onClick={() => onDeleteItem(id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                showDrawer(id);
+              }}
               size="small"
               shape="circle"
-              danger
             >
-              <DeleteOutlined />
-            </Button>
+              <FileAddOutlined />
+            </Button>{" "}
+            <Popover
+              trigger="click"
+              title="This action can't be undone. Are you sure?"
+              content={
+                <Button
+                  onClick={() => onDeleteItem(id)}
+                  // disabled={isLoading}
+                  danger
+                >
+                  Confirm
+                </Button>
+              }
+            >
+              <Button
+                danger
+                size="small"
+                shape="circle"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <DeleteOutlined />
+              </Button>
+            </Popover>
           </>
         }
       >
@@ -131,11 +157,7 @@ export const Inventory = () => {
         {item?.description && (
           <div style={{ whiteSpace: "pre-line" }}>{item?.description}</div>
         )}
-        {children && (
-          <Collapse ghost collapsible="header">
-            {children?.map(render)}
-          </Collapse>
-        )}
+        {children && <Collapse>{children?.map(render)}</Collapse>}
       </Panel>
     );
   };
@@ -143,7 +165,7 @@ export const Inventory = () => {
   const parent = data?.find((i) => !i.hasOwnProperty("parentId"));
   return (
     <>
-      <Collapse defaultActiveKey={[parent?.id || ""]} ghost>
+      <Collapse defaultActiveKey={[parent?.id || ""]}>
         {parent && render(parent.id)}
       </Collapse>
       <Drawer
