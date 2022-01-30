@@ -6,7 +6,8 @@ interface Props {
   s?: string;
 }
 
-const STATIC_STORAGE_URL = "https://denniscalvert.s3.amazonaws.com";
+const STATIC_STORAGE_URL = process.env.REACT_APP_STATIC_STORAGE_URL;
+// "https://denniscalvert.s3.amazonaws.com";
 
 export const InventoryImage: FC<Props> = ({ l, s, ...rest }) => {
   return (

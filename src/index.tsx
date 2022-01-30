@@ -5,11 +5,6 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
-// @ts-ignore
-window._app = {
-  STATIC_STORAGE_URL: "https://denniscalvert.s3.amazonaws.com",
-};
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
