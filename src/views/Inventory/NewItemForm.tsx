@@ -1,8 +1,7 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Form, Button, Input, Upload, message, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { iInventory } from "./types";
-import { UserContext } from "context/user";
+import { iInventory, iMeta } from "./types";
 import { v4 as uuid4 } from "uuid";
 import { InventoryImage } from "./shared";
 const { TextArea } = Input;
@@ -10,8 +9,10 @@ const { TextArea } = Input;
 interface Props {
   handleCreateNewItem: (data: iInventory) => void;
   handleUpdateItem: (data: iInventory) => void;
+  fetchData: () => Promise<void>;
   data?: iInventory;
   parentId?: string | undefined;
+  images: iMeta[];
 }
 
 export const NewItemForm: FC<Props> = ({
@@ -19,18 +20,20 @@ export const NewItemForm: FC<Props> = ({
   handleUpdateItem,
   data,
   parentId,
+  images,
+  fetchData,
 }) => {
-  const user = useContext(UserContext);
+  const id = data?.id || uuid4();
+
   const onFinishCreate = (formData: iInventory) => {
     handleCreateNewItem({
       ...formData,
       parentId,
-      id: uuid4(),
+      id,
     });
   };
 
   const onFinishUpdate = (formData: iInventory) => {
-    console.log(formData);
     handleUpdateItem({ ...data, ...formData });
   };
 
@@ -40,7 +43,7 @@ export const NewItemForm: FC<Props> = ({
 
   const props = {
     name: "file",
-    action: `http:/${process.env.REACT_APP_API_URL}/inventory/upload/${data?.id}`,
+    action: `${process.env.REACT_APP_API_URL}/inventory/upload/${id}`,
     headers: {
       // authorization: "authorization-text",
       Authorization: `Bearer ${sessionStorage.getItem("token") || null}`,
@@ -48,23 +51,25 @@ export const NewItemForm: FC<Props> = ({
     },
     onChange(info: any) {
       if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+        // console.log(info?.xhr?.responseURL);
+        // console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
-        // fetchData();
+        fetchData();
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
   };
 
+  console.log(data);
   return (
     <>
       <Space direction="vertical" align="center" style={{ width: "100%" }}>
         <InventoryImage
-          userId={user._id}
-          itemId={data?.id}
+          // @ts-ignore
+          {...images[id]}
           alt={data?.name}
           style={{ display: "block", margin: "0 auto" }}
         />
@@ -84,6 +89,11 @@ export const NewItemForm: FC<Props> = ({
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Form.Item>
+          <Upload {...props}>
+            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+          </Upload>
+        </Form.Item>
         <Form.Item
           label="Name"
           name="name"

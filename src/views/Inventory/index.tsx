@@ -19,6 +19,7 @@ export const Inventory = () => {
   const [isDrawerVisible, setDrawerVisible] = useState<boolean>();
   const [selectedParentId, setSelectedParentId] = useState<string>();
   const [selectedData, setSelectedData] = useState<iInventory | undefined>();
+  const [images, setImages] = useState<any>({});
   // const [isLoading, setLoading] = useState(true);
   const { userId } = useParams();
 
@@ -27,6 +28,9 @@ export const Inventory = () => {
       const res = await get(userId);
       if (res && res.data) {
         setData(res.data);
+      }
+      if (res && res.images) {
+        setImages(res.images);
       }
       // setLoading(false);
     }
@@ -78,8 +82,7 @@ export const Inventory = () => {
         header={
           <>
             <InventoryImage
-              userId={userId}
-              itemId={item?.id}
+              {...images[item?.id]}
               alt={item?.name}
               style={{ width: "20px" }}
             />
@@ -138,7 +141,6 @@ export const Inventory = () => {
   };
 
   const parent = data?.find((i) => !i.hasOwnProperty("parentId"));
-
   return (
     <>
       <Collapse defaultActiveKey={[parent?.id || ""]} ghost>
@@ -157,6 +159,8 @@ export const Inventory = () => {
           handleUpdateItem={onUpdateItem}
           parentId={selectedParentId}
           data={selectedData}
+          images={images}
+          fetchData={fetchData}
         />
       </Drawer>
     </>

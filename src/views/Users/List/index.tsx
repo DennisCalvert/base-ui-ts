@@ -61,11 +61,9 @@ export const UsersList = () => {
   };
 
   const onUpdateUser = async (data: UserType) => {
-    console.log(selectedUser, data);
     setLoading(true);
     try {
-      const res = await update({ ...selectedUser, ...data });
-      console.log(res);
+      await update({ ...selectedUser, ...data });
       fetchData();
     } catch (e) {
       console.log(e);

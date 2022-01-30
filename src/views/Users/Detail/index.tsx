@@ -30,10 +30,8 @@ export const UserDetail = () => {
 
   const props = {
     name: "file",
-    action: `http://localhost:4000/users/${user?.id}/profilePhoto`,
+    action: `${process.env.REACT_APP_API_URL}/users/${user?.id}/profilePhoto`,
     headers: {
-      // authorization: "authorization-text",
-      // Authorization: `Bearer ${sessionStorage.getItem("token") || null}`,
       "x-access-token": JSON.parse(sessionStorage.getItem("token") || ""),
     },
     onChange(info: any) {

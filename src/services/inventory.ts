@@ -3,9 +3,17 @@ import { iInventory } from "views/Inventory/types";
 
 const baseRoute = "/inventory";
 
+interface iImageList {
+  [key: string]: {
+    s: string;
+    l: string;
+  };
+}
+
 interface DTO {
   _id: string;
   data: iInventory[];
+  images: iImageList;
 }
 
 export const get = async (id: string): Promise<DTO> =>
