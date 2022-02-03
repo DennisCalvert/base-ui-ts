@@ -11,6 +11,7 @@ import { UserDetail } from "./views/Users/Detail";
 import { Home } from "./views/Home";
 import { Inventory } from "views/Inventory";
 import { EmailTester } from "views/EmailTester";
+import { Permissions } from "views/Users/Permissions";
 import { login as longinService } from "services/user";
 import { UserContext } from "context/user";
 
@@ -57,6 +58,7 @@ function App() {
               <Route path="/inventory/:userId" element={<Inventory />} />
               <Route path="/users/:id" element={<UserDetail />} />
               <Route path="/email" element={<EmailTester />} />
+              <Route path="/permissions" element={<Permissions />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </AppLayout>
