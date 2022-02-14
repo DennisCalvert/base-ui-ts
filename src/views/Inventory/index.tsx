@@ -4,11 +4,14 @@ import {
   EditOutlined,
   FileAddOutlined,
   DeleteOutlined,
+  OrderedListOutlined,
 } from "@ant-design/icons";
 import { iInventory, iMeta } from "./types";
 import { NewItemForm } from "./NewItemForm";
+import { NewSeriesForm } from "./NewSeriesForm";
 import { get, post } from "services/inventory";
 import { useParams } from "react-router-dom";
+import { v4 as uuid4 } from "uuid";
 import { InventoryImage } from "./shared";
 const { Panel } = Collapse;
 
@@ -16,7 +19,9 @@ export const Inventory = () => {
   const [data, setData] = useState<iInventory[]>([
     { id: "parent", name: "Inventory Collection" },
   ]);
-  const [isDrawerVisible, setDrawerVisible] = useState<boolean>();
+  const [isNewItemDrawerVisible, setNewItemDrawerVisible] = useState<boolean>();
+  const [isNewSeriesDrawerVisible, setNewSeriesDrawerVisible] =
+    useState<boolean>();
   const [selectedParentId, setSelectedParentId] = useState<string>();
   const [selectedData, setSelectedData] = useState<iInventory | undefined>();
   const [images, setImages] = useState<any>({});
@@ -44,7 +49,7 @@ export const Inventory = () => {
     const newInventoryState = data?.concat(mutatedItem);
     setData(newInventoryState);
     if (userId) post(userId, newInventoryState);
-    setDrawerVisible(false);
+    setNewItemDrawerVisible(false);
   };
 
   const onUpdateItem = (mutatedItem: iInventory) => {
@@ -53,15 +58,7 @@ export const Inventory = () => {
     );
     setData(newInventoryState);
     if (userId) post(userId, newInventoryState);
-    setDrawerVisible(false);
-  };
-
-  const hideDrawer = () => setDrawerVisible(false);
-
-  const showDrawer = (parentId: string | undefined, data?: iInventory) => {
-    setSelectedParentId(parentId);
-    setSelectedData(data);
-    setDrawerVisible(true);
+    setNewItemDrawerVisible(false);
   };
 
   const onDeleteItem = (id: string) => {
@@ -70,15 +67,70 @@ export const Inventory = () => {
     if (userId) post(userId, mutatedData);
   };
 
+  const onCreateSeries = (parentId: string, total: number) => {
+    const newSeries: iInventory[] = [];
+    for (let i = 0; i < total; i++) {
+      newSeries.push({
+        id: uuid4(),
+        name: `${i + 1}`,
+        parentId: parentId,
+      });
+    }
+    const newInventoryState = data?.concat(newSeries);
+    setData(newInventoryState);
+    if (userId) post(userId, newInventoryState);
+    setNewSeriesDrawerVisible(false);
+  };
+
+  const hideDrawer = () => setNewItemDrawerVisible(false);
+
+  const hideNewSeriesDrawer = () => setNewSeriesDrawerVisible(false);
+
+  const showNewItemDrawer = (
+    parentId: string | undefined,
+    data?: iInventory
+  ) => {
+    setSelectedParentId(parentId);
+    setSelectedData(data);
+    setNewItemDrawerVisible(true);
+  };
+
+  const showNewSeriesDrawer = (parentId?: string) => {
+    setSelectedParentId(parentId);
+    setNewSeriesDrawerVisible(true);
+  };
+
   const render: any = (id: string) => {
     const item = data?.find((i) => i.id === id);
     if (!item) return null;
 
-    const children = data?.filter((i) => i.parentId === id).map((i) => i.id);
+    const children = data
+      ?.filter((i) => i.parentId === id)
+      .sort((a, b) => {
+        const intA = parseInt(a.name || "");
+        const intB = parseInt(b.name || "");
+
+        if (isNaN(intA) || isNaN(intB)) {
+          const nA = a.name?.toUpperCase() || 0;
+          const nB = b.name?.toUpperCase() || 0;
+          if (nA < nB) {
+            return -1;
+          }
+          if (nA > nB) {
+            return 1;
+          }
+          return 0;
+        }
+
+        return intA - intB;
+      });
+
+    // const collectionValue = children.reduce((a, b) => a + (b.value || 0) ), 0);
+    const childrenIds = children.map((i) => i.id);
+    // .map((i) => i.id);
 
     return (
       <Panel
-        // onClick={(event) => event.stopPropagation()}
         showArrow={children.length > 0}
         key={id}
         header={
@@ -106,7 +158,17 @@ export const Inventory = () => {
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                showDrawer(item?.parentId, item);
+                showNewSeriesDrawer(item?.id);
+              }}
+              size="small"
+              shape="circle"
+            >
+              <OrderedListOutlined />
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                showNewItemDrawer(item?.parentId, item);
               }}
               size="small"
               shape="circle"
@@ -116,7 +178,7 @@ export const Inventory = () => {
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                showDrawer(id);
+                showNewItemDrawer(id);
               }}
               size="small"
               shape="circle"
@@ -127,11 +189,7 @@ export const Inventory = () => {
               trigger="click"
               title="This action can't be undone. Are you sure?"
               content={
-                <Button
-                  onClick={() => onDeleteItem(id)}
-                  // disabled={isLoading}
-                  danger
-                >
+                <Button onClick={() => onDeleteItem(id)} danger>
                   Confirm
                 </Button>
               }
@@ -148,12 +206,7 @@ export const Inventory = () => {
           </>
         }
       >
-        {/* <InventoryImage
-          userId={userId}
-          itemId={item?.id}
-          alt={item?.name}
-          style={{ display: "block", margin: "0 auto" }}
-        /> */}
+        {/* {children.length > 0 && <>{children.length} Items in collection</>} */}
         {item?.description && (
           <div style={{ whiteSpace: "pre-line" }}>{item?.description}</div>
         )}
@@ -169,10 +222,10 @@ export const Inventory = () => {
         {parent && render(parent.id)}
       </Collapse>
       <Drawer
-        title="Update User"
+        title="Manage Item"
         placement="right"
         onClose={hideDrawer}
-        visible={isDrawerVisible}
+        visible={isNewItemDrawerVisible}
         size="large"
         destroyOnClose
       >
@@ -183,6 +236,19 @@ export const Inventory = () => {
           data={selectedData}
           images={images}
           fetchData={fetchData}
+        />
+      </Drawer>
+      <Drawer
+        title="Manage Item"
+        placement="right"
+        onClose={hideNewSeriesDrawer}
+        visible={isNewSeriesDrawerVisible}
+        size="large"
+        destroyOnClose
+      >
+        <NewSeriesForm
+          handleCreateNewSeries={onCreateSeries}
+          parentId={selectedParentId}
         />
       </Drawer>
     </>

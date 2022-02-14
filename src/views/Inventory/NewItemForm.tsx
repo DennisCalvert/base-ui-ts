@@ -104,9 +104,9 @@ export const NewItemForm: FC<Props> = ({
         <Form.Item label="Description" name="description">
           <TextArea rows={7} />
         </Form.Item>
-        {/* <Form.Item label="Value" name="value">
+        <Form.Item label="Value" name="value">
           <Input type="number" prefix="$" />
-        </Form.Item> */}
+        </Form.Item>
         {/* 
         {data?.meta &&
           data.meta.map((meta: iMeta, i: number) =>

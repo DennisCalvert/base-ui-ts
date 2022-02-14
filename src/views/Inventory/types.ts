@@ -10,4 +10,5 @@ export interface iInventory {
   parentId?: string;
   imgUrl?: string;
   meta?: iMeta[];
+  value?: number;
 }
