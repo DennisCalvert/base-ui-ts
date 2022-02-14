@@ -42,7 +42,10 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
           <Menu.Item key="4" icon={<LayoutOutlined />}>
             <Link to="/email">Email Preview</Link>
           </Menu.Item>
-          <Menu.Item key="5" onClick={logout}>
+          <Menu.Item key="5" icon={<LayoutOutlined />}>
+            <Link to="/permissions">Roles</Link>
+          </Menu.Item>
+          <Menu.Item key="6" onClick={logout}>
             Logout <LogoutOutlined />
           </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="User">
