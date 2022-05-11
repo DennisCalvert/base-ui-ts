@@ -126,7 +126,7 @@ export const Inventory = () => {
       });
 
     // const collectionValue = children.reduce((a, b) => a + (b.value || 0) ), 0);
-    const childrenIds = children.map((i) => i.id);
+    // const childrenIds = children.map((i) => i.id);
     // .map((i) => i.id);
 
     return (
