@@ -26,7 +26,7 @@ export const GearFinder = () => {
     <>
       {data.map((item: iItem) => (
         <div key={item._id}>
-          <a href={item.link} target="_blank">
+          <a href={item.link} target="_blank" rel="noreferrer">
             {item.title}
           </a>{" "}
           {item.price}
