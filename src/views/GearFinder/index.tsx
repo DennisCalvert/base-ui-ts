@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Table, Image, Spin } from "antd";
+import { Button, Table, Image } from "antd";
 interface iItem {
   _id: string;
   title: string;
@@ -38,9 +38,7 @@ export const GearFinder = () => {
     );
   }, [dismissedItems]);
 
-  const handleShowAllItems = () => {
-    setDismissedItems([]);
-  };
+  const handleShowAllItems = () => setDismissedItems([]);
 
   const handleSetDismissedItems = (id: string) => {
     setDismissedItems((ids) => [...ids, id]);
