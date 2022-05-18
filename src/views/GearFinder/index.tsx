@@ -75,6 +75,19 @@ export const GearFinder = () => {
       ),
     },
     {
+      dataIndex: "title",
+      key: "title",
+      render: (title: string, item: iItem) => (
+        <a
+          href={`https://www.sweetwater.com/store/search.php?s=${title}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Search Sweetwater
+        </a>
+      ),
+    },
+    {
       dataIndex: "price",
       key: "price",
     },
