@@ -177,6 +177,7 @@ export const UsersList = () => {
         placement="right"
         onClose={hideUpdateDrawer}
         visible={isUpdateUserDrawerVisible}
+        size="large"
         destroyOnClose
       >
         <CreateNewUser
