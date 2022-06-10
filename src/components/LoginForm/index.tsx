@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Card, Form, Input, Layout, Button, Checkbox, Spin } from "antd";
+import { Card, Form, Input, Button, Checkbox, Spin } from "antd";
 import { UserType } from "../../types/User";
 
 export interface LoginFormProps {

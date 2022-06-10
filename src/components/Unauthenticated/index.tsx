@@ -1,10 +1,8 @@
 import { FC, useState } from "react";
-
 import { LoginForm } from "components/LoginForm";
 import { LoginFormProps } from "../LoginForm";
 import { SignUpForm } from "components/SignUpForm";
 import { Button, Layout } from "antd";
-import { UserType } from "types/User";
 const { Content } = Layout;
 
 export const Unauthenticated: FC<LoginFormProps> = ({
@@ -13,7 +11,6 @@ export const Unauthenticated: FC<LoginFormProps> = ({
   isLoading,
 }) => {
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(true);
-  const [internalIsLoading, setInternalIsLoading] = useState(isLoading);
 
   const handleSignUpClick = () => {
     setIsLoginFormVisible(false);
@@ -45,7 +42,7 @@ export const Unauthenticated: FC<LoginFormProps> = ({
           <LoginForm
             onLoginFinish={onLoginFinish}
             onLoginFailed={onLoginFailed}
-            isLoading={internalIsLoading}
+            isLoading={isLoading}
           />
         ) : (
           <SignUpForm />

@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Card, Form, Input, Layout, Button, Checkbox, Spin } from "antd";
+import { Card, Form, Input, Button, Checkbox, Spin } from "antd";
 import { create } from "services/user";
 import { UserType } from "../../types/User";
 
@@ -10,7 +10,7 @@ export const SignUpForm: FC = () => {
   const onFinish = async (data: UserType) => {
     setIsLoading(true);
     try {
-      const res = await create(data);
+      await create(data);
       setIsComplete(true);
     } catch (e) {
       console.log(e);
