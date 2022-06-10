@@ -17,7 +17,7 @@ export const list = async (): Promise<any> => api.get(baseRoute);
 export const get = async (id: string | undefined): Promise<any> =>
   api.get(`${baseRoute}/${id}`);
 
-export const create = async (data: any) => await api.post(baseRoute, data);
+export const create = async (data: any) => await api.post("/signup", data);
 
 export const destroy = async (id: string) =>
   await api.destroy(`${baseRoute}/${id}`);

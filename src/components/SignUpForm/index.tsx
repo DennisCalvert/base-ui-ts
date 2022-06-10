@@ -1,26 +1,38 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Card, Form, Input, Layout, Button, Checkbox, Spin } from "antd";
+import { create } from "services/user";
 import { UserType } from "../../types/User";
 
-export interface LoginFormProps {
-  onLoginFinish: (data: UserType) => Promise<any>;
-  onLoginFailed: (e: any) => void;
-  isLoading: boolean;
-}
+export const SignUpForm: FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
-export const LoginForm: FC<LoginFormProps> = ({
-  onLoginFinish,
-  onLoginFailed,
-  isLoading,
-}) => {
+  const onFinish = async (data: UserType) => {
+    setIsLoading(true);
+    try {
+      const res = await create(data);
+      setIsComplete(true);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onFailed = () => {};
+
+  if (isComplete) {
+    return <h3>Check your email to complete signup. Thanks!</h3>;
+  }
+
   return (
-    <Card>
+    <Card title="Sign Up">
       <Form
         name="basic"
-        layout="vertical"
         initialValues={{ remember: true }}
-        onFinish={onLoginFinish}
-        onFinishFailed={onLoginFailed}
+        layout="vertical"
+        onFinish={onFinish}
+        onFinishFailed={onFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -40,6 +52,14 @@ export const LoginForm: FC<LoginFormProps> = ({
         </Form.Item>
 
         <Form.Item
+          label="Confirm Password"
+          name="confirmPassword"
+          rules={[{ required: true, message: "Please confirm your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
           name="remember"
           valuePropName="checked"
           wrapperCol={{ offset: 8, span: 16 }}
@@ -49,7 +69,7 @@ export const LoginForm: FC<LoginFormProps> = ({
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit" disabled={isLoading}>
-            {isLoading ? <Spin /> : "Login"}
+            {isLoading ? <Spin /> : "Submit"}
           </Button>
         </Form.Item>
       </Form>

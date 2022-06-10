@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { LoginForm } from "./components/LoginForm";
+// import { LoginForm } from "./components/LoginForm";
 import { AppLayout } from "./components/Layout";
 import { Routes, Route } from "react-router-dom";
 import { UserType } from "types/User";
@@ -15,6 +15,7 @@ import { GearFinder } from "views/GearFinder";
 import { Permissions } from "views/Users/Permissions";
 import { login as longinService } from "services/user";
 import { UserContext } from "context/user";
+import { Unauthenticated } from "components/Unauthenticated";
 
 const PageNotFound = () => <h1>Not Found</h1>;
 
@@ -46,8 +47,6 @@ function App() {
     console.log("Failed:", e);
   };
 
-  console.log({ userData });
-
   return (
     <div className="App">
       {isAuthenticated ? (
@@ -66,7 +65,7 @@ function App() {
           </AppLayout>
         </UserContext.Provider>
       ) : (
-        <LoginForm
+        <Unauthenticated
           onLoginFinish={onLoginFinish}
           onLoginFailed={onLoginFailed}
           isLoading={isLoading}
