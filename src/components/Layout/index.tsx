@@ -48,8 +48,8 @@ export const AppLayout: FC<Props> = ({ children, logout }) => {
           <Menu.Item key="6" icon={<LayoutOutlined />}>
             <Link to="/permissions">Roles</Link>
           </Menu.Item>
-          <Menu.Item key="7" onClick={logout}>
-            Logout <LogoutOutlined />
+          <Menu.Item key="7" onClick={logout} icon={<LogoutOutlined />}>
+            Logout
           </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="User">
             <Menu.Item key="3">Tom</Menu.Item>
