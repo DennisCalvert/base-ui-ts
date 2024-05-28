@@ -3,7 +3,7 @@ import "./App.css";
 // import { LoginForm } from "./components/LoginForm";
 import { AppLayout } from "./components/Layout";
 import { Routes, Route } from "react-router-dom";
-import { UserType } from "types/User";
+import { UserType, UserWithTokenType } from "types/User";
 import { blankUser } from "context/user";
 
 import { UsersList } from "./views/Users/List";
@@ -13,29 +13,21 @@ import { Inventory } from "views/Inventory";
 import { EmailTester } from "views/EmailTester";
 import { GearFinder } from "views/GearFinder";
 import { Permissions } from "views/Users/Permissions";
-import { login as longinService } from "services/user";
+import { UseUser } from "hooks/useUser";
 import { UserContext } from "context/user";
 import { Unauthenticated } from "components/Unauthenticated";
 
 const PageNotFound = () => <h1>Not Found</h1>;
 
 function App() {
-  const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
-  const [userData, setUserData] = useState<UserType>(blankUser);
-
-  const logout = () => {
-    window.sessionStorage.removeItem("token");
-    setAuthenticated(false);
-  };
+  const auth = UseUser();
 
   const onLoginFinish = async (data: UserType): Promise<void> => {
     const { email, password } = data;
     try {
       setLoading(true);
-      const res = await longinService(email, password);
-      setUserData(res);
-      setAuthenticated(true);
+      await auth.login(email, password);
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -49,9 +41,9 @@ function App() {
 
   return (
     <div className="App">
-      {isAuthenticated ? (
-        <UserContext.Provider value={userData}>
-          <AppLayout logout={logout}>
+      {auth.isAuthenticated && auth.userData ? (
+        <UserContext.Provider value={auth.userData}>
+          <AppLayout logout={auth.logout}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/users" element={<UsersList />} />

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { UserType } from "types/User";
+import { UserType, UserWithTokenType } from "types/User";
 
 export const blankUser = {
   name: "",
@@ -9,6 +9,7 @@ export const blankUser = {
   id: "",
   _id: "",
   imgUrl: "",
+  token: "",
 };
 
-export const UserContext = createContext<UserType>(blankUser);
+export const UserContext = createContext<UserWithTokenType>(blankUser);

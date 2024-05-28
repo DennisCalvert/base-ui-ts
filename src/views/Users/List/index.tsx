@@ -8,21 +8,24 @@ import {
   Popover,
   Avatar,
   Image,
+  Skeleton,
 } from "antd";
 import {
   CheckCircleOutlined,
   EditOutlined,
   DeleteOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
-import { list, create, destroy, update } from "services/user";
-import { CreateNewUser } from "../CreateNewUser";
+import { list, create, destroy, update } from "../data/service";
+import { CreateNewUser } from "../components/CreateNewUser";
+import { UpdateUser } from "views/Users/components/UpdateUser";
 import { UserType } from "types/User";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export const UsersList = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   const [isPageLoading, setPageLoading] = useState(true);
-  const [isLoading, setLoading] = useState(false);
+  // const [isLoading, setLoading] = useState(false);
   const [isNewUserDrawerVisible, setNewUserDrawerVisible] = useState(false);
   const [isUpdateUserDrawerVisible, setUpdateUserDrawerVisible] =
     useState(false);
@@ -30,7 +33,8 @@ export const UsersList = () => {
   const [selectedUser, setSelectedUser] = useState<UserType | undefined>();
 
   const fetchData = useCallback(async () => {
-    const res = await list();
+    const res: UserType[] = await list();
+    // res.sort(u => u.)
     setUsers(res);
     setPageLoading(false);
   }, []);
@@ -47,42 +51,23 @@ export const UsersList = () => {
   };
   const hideUpdateDrawer = () => setUpdateUserDrawerVisible(false);
 
-  const onCreateNewUser = async (data: UserType) => {
-    setLoading(true);
-    try {
-      await create(data);
-      fetchData();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-      setNewUserDrawerVisible(false);
-    }
-  };
+  // const onCreateNewUser = async (data: UserType) => {
+  //   setLoading(true);
+  //   try {
+  //     await create(data);
+  //     fetchData();
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setLoading(false);
+  //     setNewUserDrawerVisible(false);
+  //   }
+  // };
 
-  const onUpdateUser = async (data: UserType) => {
-    setLoading(true);
-    try {
-      await update({ ...selectedUser, ...data });
-      fetchData();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-      setUpdateUserDrawerVisible(false);
-    }
-  };
-
-  const onDeleteUser = async (id: string) => {
-    setLoading(true);
-    try {
-      await destroy(id);
-      fetchData();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
+  const onUpdateUser = async () => {
+    fetchData();
+    setNewUserDrawerVisible(false);
+    setUpdateUserDrawerVisible(false);
   };
 
   const columns = [
@@ -91,7 +76,17 @@ export const UsersList = () => {
       dataIndex: "id",
       key: "id",
       render: (id: string, user: UserType) => (
-        <Avatar src={<Image src={user.imgUrl} style={{ width: 32 }} />} />
+        <Avatar
+          src={
+            <Image
+              src={
+                user.imgUrl ||
+                "https://magiccityfilmmakers.s3.us-east-2.amazonaws.com/62a2b18926b09cb95fc72e99/uploads/inventory/s/84d4506f-03fe-4cf6-80a0-08b199095595.jpeg"
+              }
+              style={{ width: 32 }}
+            />
+          }
+        />
       ),
     },
     {
@@ -99,9 +94,9 @@ export const UsersList = () => {
       dataIndex: "email",
       key: "email",
       render: (email: string, user: UserType) => (
-        <Link type="link" to={`/inventory/${user.id}`}>
+        <Button type="link" onClick={() => showUpdateDrawer(user)}>
           {email}
-        </Link>
+        </Button>
       ),
     },
     {
@@ -110,45 +105,25 @@ export const UsersList = () => {
       key: "isAdmin",
       render: (isAdmin: boolean, user: UserType) =>
         isAdmin ? <CheckCircleOutlined /> : "-",
-      // isAdmin ? <CheckCircleOutlined /> : <CloseCircleOutlined />,
+      // isAdmin ? (
+      //   <CheckCircleOutlined color="green" />
+      // ) : (
+      //   <CloseCircleOutlined />
+      // ),
     },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (email: string, user: UserType) => (
-        <Space>
-          <Button onClick={() => showUpdateDrawer(user)}>
-            <EditOutlined />
-          </Button>
-          {/* {u.isActive ? (
-              <Button>Deactivate</Button>
-            ) : (
-              <Button>Deactivate</Button>
-            )} */}
-          <Popover
-            trigger="click"
-            title="This action can't be undone. Are you sure?"
-            content={
-              <Button
-                onClick={() => onDeleteUser(user.id)}
-                disabled={isLoading}
-                danger
-              >
-                Confirm
-              </Button>
-            }
-          >
-            <Button danger>
-              <DeleteOutlined />
-            </Button>
-          </Popover>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Actions",
+    //   dataIndex: "actions",
+    //   key: "actions",
+    //   render: (email: string, user: UserType) => (
+    //     <Button onClick={() => showUpdateDrawer(user)}>
+    //       <EditOutlined />
+    //     </Button>
+    //   ),
+    // },
   ];
 
-  if (isPageLoading) return <Spin />;
+  if (isPageLoading) return <Skeleton />;
 
   return (
     <>
@@ -157,11 +132,7 @@ export const UsersList = () => {
           New User
         </Button>
       </Space>
-      <Table
-        columns={columns}
-        dataSource={users}
-        // pagination={{ position: ["topRight"] }}
-      />
+      <Table columns={columns} dataSource={users} />
 
       <Drawer
         title="Create New User"
@@ -170,7 +141,7 @@ export const UsersList = () => {
         visible={isNewUserDrawerVisible}
         destroyOnClose
       >
-        <CreateNewUser onFinish={onCreateNewUser} fetchData={fetchData} />
+        <CreateNewUser onFinish={onUpdateUser} />
       </Drawer>
       <Drawer
         title="Update User"
@@ -180,7 +151,7 @@ export const UsersList = () => {
         size="large"
         destroyOnClose
       >
-        <CreateNewUser
+        <UpdateUser
           onFinish={onUpdateUser}
           data={selectedUser}
           fetchData={fetchData}

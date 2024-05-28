@@ -63,7 +63,6 @@ export const NewItemForm: FC<Props> = ({
     },
   };
 
-  console.log(data);
   return (
     <>
       <Space direction="vertical" align="center" style={{ width: "100%" }}>

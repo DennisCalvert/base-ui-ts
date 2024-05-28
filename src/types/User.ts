@@ -1,4 +1,4 @@
-import { iInventory } from "views/Inventory/types";
+// import { iInventory } from "views/Inventory/types";
 
 export type UserType = {
   email: string;
@@ -10,3 +10,5 @@ export type UserType = {
   password?: string;
   imgUrl: string;
 };
+
+export type UserWithTokenType = Partial<UserType> & { token: string };

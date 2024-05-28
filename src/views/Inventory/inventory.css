@@ -1,0 +1,7 @@
+.actions-panel {
+  opacity: 0.2;
+}
+
+.actions-panel:hover {
+  opacity: 1;
+}

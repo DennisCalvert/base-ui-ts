@@ -1,18 +1,14 @@
-import api from "./base-api";
-import { UserType, UserWithTokenType } from "types/User";
+import api from "services/base-api";
+import { UserType } from "types/User";
 
-const baseRoute = "/users";
-
-// export type UserWithTokenType = Partial<UserType> & { token: string };
+const baseRoute = "/userAdmin";
 
 export const login = async (
   email: string,
   password: string | undefined
-): Promise<UserWithTokenType> => {
+): Promise<UserType> => {
   const res = await api.post("/login", { email, password });
-  // if (res && res.token) {
-  //   window.sessionStorage.setItem("token", JSON.stringify(res.token));
-  // }
+  window.sessionStorage.setItem("token", JSON.stringify(res.token));
   return res;
 };
 

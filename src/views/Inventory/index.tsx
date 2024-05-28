@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Collapse, Drawer, Popover } from "antd";
+import { Button, Collapse, Drawer, Popover, Skeleton } from "antd";
 import {
   EditOutlined,
   FileAddOutlined,
@@ -9,10 +9,13 @@ import {
 import { iInventory, iMeta } from "./types";
 import { NewItemForm } from "./NewItemForm";
 import { NewSeriesForm } from "./NewSeriesForm";
-import { get, post } from "services/inventory";
+import { get, post } from "views/Inventory/inventoryService";
 import { useParams } from "react-router-dom";
 import { v4 as uuid4 } from "uuid";
 import { InventoryImage } from "./shared";
+import { data as testData } from "./flatData";
+import { useInventoryGet } from "./useInventory";
+import "./inventory.css";
 const { Panel } = Collapse;
 
 export const Inventory = () => {
@@ -26,7 +29,9 @@ export const Inventory = () => {
   const [selectedData, setSelectedData] = useState<iInventory | undefined>();
   const [images, setImages] = useState<any>({});
   // const [isLoading, setLoading] = useState(true);
+
   const { userId } = useParams();
+  // const { data, isLoading } = useInventoryGet(userId);
 
   const fetchData = useCallback(async () => {
     if (userId) {
@@ -46,6 +51,7 @@ export const Inventory = () => {
   }, [fetchData]);
 
   const onAddItem = (mutatedItem: iInventory) => {
+    // console.log(mutatedItem);
     const newInventoryState = data?.concat(mutatedItem);
     setData(newInventoryState);
     if (userId) post(userId, newInventoryState);
@@ -53,6 +59,7 @@ export const Inventory = () => {
   };
 
   const onUpdateItem = (mutatedItem: iInventory) => {
+    // console.log(mutatedItem);
     const newInventoryState = data?.map((i) =>
       i.id === mutatedItem?.id ? mutatedItem : i
     );
@@ -101,7 +108,10 @@ export const Inventory = () => {
   };
 
   const render: any = (id: string) => {
+    // console.log(data);
+    // console.log(id);
     const item = data?.find((i) => i.id === id);
+    // console.log(item);
     if (!item) return null;
 
     const children = data
@@ -129,9 +139,13 @@ export const Inventory = () => {
     // const childrenIds = children.map((i) => i.id);
     // .map((i) => i.id);
 
+    // if (isLoading) {
+    //   return <Skeleton />;
+    // }
+
     return (
       <Panel
-        showArrow={children.length > 0}
+        showArrow={!!children?.length}
         key={id}
         header={
           <>
@@ -145,7 +159,7 @@ export const Inventory = () => {
           </>
         }
         extra={
-          <>
+          <span className="actions-panel">
             {item?.meta &&
               item?.meta.map((m: iMeta) =>
                 Object.keys(m).map((key) => (
@@ -164,7 +178,7 @@ export const Inventory = () => {
               shape="circle"
             >
               <OrderedListOutlined />
-            </Button>
+            </Button>{" "}
             <Button
               onClick={(e) => {
                 e.stopPropagation();
@@ -203,14 +217,16 @@ export const Inventory = () => {
                 <DeleteOutlined />
               </Button>
             </Popover>
-          </>
+          </span>
         }
       >
         {/* {children.length > 0 && <>{children.length} Items in collection</>} */}
         {item?.description && (
           <div style={{ whiteSpace: "pre-line" }}>{item?.description}</div>
         )}
-        {children && <Collapse>{children?.map(render)}</Collapse>}
+        {children && (
+          <Collapse>{children?.map((item) => render(item.id))}</Collapse>
+        )}
       </Panel>
     );
   };
@@ -218,7 +234,7 @@ export const Inventory = () => {
   const parent = data?.find((i) => !i.hasOwnProperty("parentId"));
   return (
     <>
-      <Collapse defaultActiveKey={[parent?.id || ""]}>
+      <Collapse defaultActiveKey={[1, parent?.id || ""]}>
         {parent && render(parent.id)}
       </Collapse>
       <Drawer
