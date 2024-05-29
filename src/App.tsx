@@ -20,25 +20,20 @@ import { Unauthenticated } from "components/Unauthenticated";
 const PageNotFound = () => <h1>Not Found</h1>;
 
 function App() {
-  const [isLoading, setLoading] = useState(false);
   const auth = UseUser();
 
   const onLoginFinish = async (data: UserType): Promise<void> => {
     const { email, password } = data;
-    try {
-      setLoading(true);
-      await auth.login(email, password);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
+    await auth.login(email, password);
   };
 
   const onLoginFailed = (e: any) => {
     console.log("Failed:", e);
   };
 
+  // if (!auth.isAccountVerified) {
+  //   return <div>Check your email...</div>;
+  // }
   return (
     <div className="App">
       {auth.isAuthenticated && auth.userData ? (
@@ -60,7 +55,8 @@ function App() {
         <Unauthenticated
           onLoginFinish={onLoginFinish}
           onLoginFailed={onLoginFailed}
-          isLoading={isLoading}
+          isLoading={auth.isLoading}
+          isAccountVerified={auth.isAccountVerified}
         />
       )}
     </div>

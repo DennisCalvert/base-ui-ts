@@ -1,18 +1,21 @@
 import { FC } from "react";
-import { Card, Form, Input, Button, Checkbox, Spin } from "antd";
+import { Card, Form, Input, Button, Checkbox, Spin, Alert } from "antd";
 import { UserType } from "../../types/User";
 
 export interface LoginFormProps {
   onLoginFinish: (data: UserType) => Promise<any>;
   onLoginFailed: (e: any) => void;
   isLoading: boolean;
+  isAccountVerified?: boolean | null;
 }
 
 export const LoginForm: FC<LoginFormProps> = ({
   onLoginFinish,
   onLoginFailed,
   isLoading,
+  isAccountVerified,
 }) => {
+  console.log(isAccountVerified);
   return (
     <Card>
       <Form
@@ -39,11 +42,7 @@ export const LoginForm: FC<LoginFormProps> = ({
           <Input.Password />
         </Form.Item>
 
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
+        <Form.Item name="remember" valuePropName="checked">
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
@@ -52,6 +51,9 @@ export const LoginForm: FC<LoginFormProps> = ({
             {isLoading ? <Spin /> : "Login"}
           </Button>
         </Form.Item>
+        {isAccountVerified === false && (
+          <Alert message="Verify your email address" type="error" closable />
+        )}
       </Form>
     </Card>
   );

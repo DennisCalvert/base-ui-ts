@@ -9,6 +9,7 @@ export type UserType = {
   _id: string;
   password?: string;
   imgUrl: string;
+  isAccountVerified: boolean;
 };
 
 export type UserWithTokenType = Partial<UserType> & { token: string };

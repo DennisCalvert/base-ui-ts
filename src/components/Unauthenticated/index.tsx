@@ -9,6 +9,7 @@ export const Unauthenticated: FC<LoginFormProps> = ({
   onLoginFinish,
   onLoginFailed,
   isLoading,
+  isAccountVerified,
 }) => {
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(true);
 
@@ -43,6 +44,7 @@ export const Unauthenticated: FC<LoginFormProps> = ({
             onLoginFinish={onLoginFinish}
             onLoginFailed={onLoginFailed}
             isLoading={isLoading}
+            isAccountVerified={isAccountVerified}
           />
         ) : (
           <SignUpForm />
