@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { login as loginService } from "../services/user";
 import { UserWithTokenType } from "types/User";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-export const UseUser = () => {
+export type AuthType = {
+  isAuthenticated: boolean;
+  logout: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  userData: UserWithTokenType | undefined;
+  isAccountVerified: boolean | null;
+  isLoading: boolean;
+};
+export const UseUser = (): AuthType => {
   const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
   const [isAccountVerified, setIsAccountVerified] = useState<boolean | null>(
     null
@@ -11,6 +19,7 @@ export const UseUser = () => {
   const [userData, setUserData] = useState<UserWithTokenType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // useEffect(() => {
   //   const isSessionValid = !!window.sessionStorage.getItem("token");
@@ -28,13 +37,13 @@ export const UseUser = () => {
     setIsLoading(true);
     try {
       const data = await loginService(email, password);
-      setIsAccountVerified(!!data.isAccountVerified);
+      setIsAccountVerified(data.isAccountVerified === true);
 
       if (data && data.token) {
         window.sessionStorage.setItem("token", JSON.stringify(data.token));
         setAuthenticated(true);
         setUserData(data);
-        navigate("/");
+        navigate(location);
       }
     } catch (e) {
       console.log(e);
