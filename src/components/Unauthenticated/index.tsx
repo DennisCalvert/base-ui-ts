@@ -22,7 +22,8 @@ export const Unauthenticated: FC<LoginFormProps> = ({
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    // <Layout style={{ minHeight: "100vh" }}>
+    <>
       {isLoginFormVisible ? (
         <Button type="primary" onClick={handleSignUpClick}>
           Sign up
@@ -50,6 +51,7 @@ export const Unauthenticated: FC<LoginFormProps> = ({
           <SignUpForm />
         )}
       </Content>
-    </Layout>
+    </>
+    // </Layout>
   );
 };

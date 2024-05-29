@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Form,
   Button,
@@ -7,19 +7,12 @@ import {
   Image,
   Upload,
   message,
-  Select,
-  Space,
   Popover,
 } from "antd";
 import "../index.css";
-import {
-  DeleteOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import { UserType } from "../../../../types/User";
-import { list, create, destroy, update } from "../../data/service";
+import { DeleteOutlined, UploadOutlined } from "@ant-design/icons";
+import { UserType } from "types/User";
+import { destroy, update } from "../../data/service";
 
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 // const { Option } = Select;
@@ -35,51 +28,35 @@ export const UpdateUser: FC<UpdateUserProps> = ({
   data,
   fetchData,
 }) => {
-  const [isLoading, setLoading] = useState(false);
-
   const onFinishFailed = (data: any) => {
     console.error(data);
   };
 
   const onDeleteUser = async (id: string) => {
-    setLoading(true);
     try {
       await destroy(id);
-      // fetchData();
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
       onFinish && onFinish();
     }
   };
 
   const onFormSubmit = async (formData: UserType) => {
-    // console.log(data);
-    // return;
-
-    setLoading(true);
     try {
       // @ts-ignore
       await update({ id: data?._id, ...formData });
-      // await update({ id: data.id, ...formData });
-
-      // fetchData();
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
       if (onFinish) {
-        // @ts-ignore
         onFinish();
       }
-      // setUpdateUserDrawerVisible(false);
     }
   };
 
   const props = {
     name: "file",
-    // action: `http://localhost:4000/users/${data?.id}/profilePhoto`,
     action: `${REACT_APP_API_URL}/users/${data?.id}/profilePhoto`,
     headers: {
       // authorization: "authorization-text",
@@ -98,7 +75,7 @@ export const UpdateUser: FC<UpdateUserProps> = ({
       }
     },
   };
-  //   console.log(data);
+
   return (
     <>
       <span className="center" style={{ paddingBottom: "25px" }}>
@@ -135,19 +112,7 @@ export const UpdateUser: FC<UpdateUserProps> = ({
           </Form.Item>
         )}
 
-        <Form.Item
-          label="Bio"
-          name="bio"
-          // rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.TextArea />
-        </Form.Item>
-
-        <Form.Item
-          label="Notes"
-          name="notes"
-          // rules={[{ required: true, message: "Please input your password!" }]}
-        >
+        <Form.Item label="Notes" name="notes">
           <Input.TextArea />
         </Form.Item>
 
@@ -163,11 +128,11 @@ export const UpdateUser: FC<UpdateUserProps> = ({
           <Checkbox />
         </Form.Item>
 
-        {data?.isActive ? (
+        {/* {data?.isActive ? (
           <Button>Deactivate</Button>
         ) : (
           <Button>Activate</Button>
-        )}
+        )} */}
         <Popover
           trigger="click"
           title="This action can't be undone. Are you sure?"
@@ -175,7 +140,6 @@ export const UpdateUser: FC<UpdateUserProps> = ({
             <Button
               // @ts-ignore
               onClick={() => onDeleteUser && onDeleteUser(data.id)}
-              // disabled={isLoading}
               danger
             >
               Confirm

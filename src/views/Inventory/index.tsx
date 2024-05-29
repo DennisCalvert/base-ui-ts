@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Collapse, Drawer, Popover, Skeleton } from "antd";
+import { Button, Collapse, Drawer, Popover } from "antd";
 import {
   EditOutlined,
   FileAddOutlined,
@@ -13,8 +13,6 @@ import { get, post } from "views/Inventory/inventoryService";
 import { useParams } from "react-router-dom";
 import { v4 as uuid4 } from "uuid";
 import { InventoryImage } from "./shared";
-import { data as testData } from "./flatData";
-import { useInventoryGet } from "./useInventory";
 import "./inventory.css";
 const { Panel } = Collapse;
 
@@ -51,7 +49,6 @@ export const Inventory = () => {
   }, [fetchData]);
 
   const onAddItem = (mutatedItem: iInventory) => {
-    // console.log(mutatedItem);
     const newInventoryState = data?.concat(mutatedItem);
     setData(newInventoryState);
     if (userId) post(userId, newInventoryState);
@@ -59,7 +56,6 @@ export const Inventory = () => {
   };
 
   const onUpdateItem = (mutatedItem: iInventory) => {
-    // console.log(mutatedItem);
     const newInventoryState = data?.map((i) =>
       i.id === mutatedItem?.id ? mutatedItem : i
     );
@@ -108,10 +104,7 @@ export const Inventory = () => {
   };
 
   const render: any = (id: string) => {
-    // console.log(data);
-    // console.log(id);
     const item = data?.find((i) => i.id === id);
-    // console.log(item);
     if (!item) return null;
 
     const children = data

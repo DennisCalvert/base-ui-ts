@@ -1,31 +1,14 @@
 import { useCallback, useState, useEffect } from "react";
-import {
-  Button,
-  Drawer,
-  Space,
-  Table,
-  Spin,
-  Popover,
-  Avatar,
-  Image,
-  Skeleton,
-} from "antd";
-import {
-  CheckCircleOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  CloseCircleOutlined,
-} from "@ant-design/icons";
-import { list, create, destroy, update } from "../data/service";
+import { Button, Drawer, Space, Table, Avatar, Image, Skeleton } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
+import { list } from "views/Users/data/service";
 import { CreateNewUser } from "../components/CreateNewUser";
 import { UpdateUser } from "views/Users/components/UpdateUser";
 import { UserType } from "types/User";
-// import { Link } from "react-router-dom";
 
 export const UsersList = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   const [isPageLoading, setPageLoading] = useState(true);
-  // const [isLoading, setLoading] = useState(false);
   const [isNewUserDrawerVisible, setNewUserDrawerVisible] = useState(false);
   const [isUpdateUserDrawerVisible, setUpdateUserDrawerVisible] =
     useState(false);
@@ -34,7 +17,6 @@ export const UsersList = () => {
 
   const fetchData = useCallback(async () => {
     const res: UserType[] = await list();
-    // res.sort(u => u.)
     setUsers(res);
     setPageLoading(false);
   }, []);
@@ -51,19 +33,6 @@ export const UsersList = () => {
   };
   const hideUpdateDrawer = () => setUpdateUserDrawerVisible(false);
 
-  // const onCreateNewUser = async (data: UserType) => {
-  //   setLoading(true);
-  //   try {
-  //     await create(data);
-  //     fetchData();
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setLoading(false);
-  //     setNewUserDrawerVisible(false);
-  //   }
-  // };
-
   const onUpdateUser = async () => {
     fetchData();
     setNewUserDrawerVisible(false);
@@ -72,7 +41,6 @@ export const UsersList = () => {
 
   const columns = [
     {
-      // title: ""
       dataIndex: "id",
       key: "id",
       render: (id: string, user: UserType) => (
@@ -105,22 +73,7 @@ export const UsersList = () => {
       key: "isAdmin",
       render: (isAdmin: boolean, user: UserType) =>
         isAdmin ? <CheckCircleOutlined /> : "-",
-      // isAdmin ? (
-      //   <CheckCircleOutlined color="green" />
-      // ) : (
-      //   <CloseCircleOutlined />
-      // ),
     },
-    // {
-    //   title: "Actions",
-    //   dataIndex: "actions",
-    //   key: "actions",
-    //   render: (email: string, user: UserType) => (
-    //     <Button onClick={() => showUpdateDrawer(user)}>
-    //       <EditOutlined />
-    //     </Button>
-    //   ),
-    // },
   ];
 
   if (isPageLoading) return <Skeleton />;

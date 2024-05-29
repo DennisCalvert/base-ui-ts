@@ -1,7 +1,7 @@
 import { createContext } from "react";
-import { UserType, UserWithTokenType } from "types/User";
+import { UserWithTokenType } from "types/User";
 
-export const blankUser = {
+export const blankUser: UserWithTokenType = {
   name: "",
   email: "",
   isAdmin: false,

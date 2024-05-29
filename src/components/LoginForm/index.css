@@ -1,0 +1,15 @@
+.login-input {
+  padding: 15px;
+  background-color: #e8f0fe;
+}
+
+@media (min-width: 800px) {
+  .login-form {
+    width: 100%;
+    max-width: 420px;
+  }
+}
+/* 
+.login-input input {
+  padding: 15px;
+} */
